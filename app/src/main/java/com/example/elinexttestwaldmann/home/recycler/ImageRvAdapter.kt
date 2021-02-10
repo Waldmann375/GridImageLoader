@@ -6,15 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.elinexttestwaldmann.model.ImageModel
 
-class ImageRvAdapter() : ListAdapter<ImageModel, ImageViewHolder>(
+class ImageRvAdapter: ListAdapter<ImageModel, ImageViewHolder>(
     IMAGE_COMPARATOR
 ) {
-    override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)){
-            is ImageModel.Image -> TYPE_IMAGE
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         return ImageViewHolder.create(parent)
     }
@@ -24,8 +18,6 @@ class ImageRvAdapter() : ListAdapter<ImageModel, ImageViewHolder>(
     }
 
     companion object {
-        val TYPE_IMAGE = 1
-
         val IMAGE_COMPARATOR = object : DiffUtil.ItemCallback<ImageModel>() {
             override fun areItemsTheSame(oldItem: ImageModel, newItem: ImageModel): Boolean {
                 return newItem::class == oldItem::class
@@ -35,7 +27,6 @@ class ImageRvAdapter() : ListAdapter<ImageModel, ImageViewHolder>(
             override fun areContentsTheSame(oldItem: ImageModel, newItem: ImageModel): Boolean {
 //                return (newItem as ImageModel.Image).number == (oldItem as ImageModel.Image).number
                 return oldItem.toString() == newItem.toString()
-
             }
         }
     }

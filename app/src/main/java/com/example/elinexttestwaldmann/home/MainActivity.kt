@@ -3,15 +3,13 @@ package com.example.elinexttestwaldmann.home
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import coil.imageLoader
+import com.example.elinexttestwaldmann.Constants.Companion.ROWS_COUNT
 import com.example.elinexttestwaldmann.R
 import com.example.elinexttestwaldmann.databinding.ActivityMainBinding
 import com.example.elinexttestwaldmann.home.recycler.ImageRvAdapter
 import com.example.elinexttestwaldmann.model.ImageModel
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,53 +32,46 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        when(id){
-            R.id.action_reload ->{
+        when (id) {
+            R.id.action_reload -> {
                 reloadList()
             }
-            R.id.action_add ->{
+            R.id.action_add -> {
                 addImage()
             }
         }
-            return super.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(item)
     }
 
-    private fun getNewList():MutableList<ImageModel>{
+    //creating new list
+    private fun getNewList(): MutableList<ImageModel> {
         val list = mutableListOf<ImageModel>()
-        for (i in 0..136) {
+        for (i in 0..139) {
             list.add(ImageModel.Image(i))
         }
         imageList = list
         return list
     }
 
-    private fun reloadList(){
-        //imageList = mutableListOf()
+    private fun reloadList() {
         binding.rvImages.adapter = null
         adatper = ImageRvAdapter()
         binding.rvImages.adapter = adatper
         adatper.submitList(getNewList())
-        /*Toast.makeText(this, "reload fun operates", Toast.LENGTH_SHORT).show()
-        imageList.clear()
-        adatper.submitList(updateAndGetList())*/
-        //adatper.notifyDataSetChanged()
-        /*populateList()
-        adatper.submitList(imageList)
-        adatper.notifyDataSetChanged()*/
     }
 
     private fun addImage() {
-        Toast.makeText(this, "plus fun operates", Toast.LENGTH_SHORT).show()
         imageList.add(ImageModel.Image(imageList.size))
         adatper.submitList(imageList)
         adatper.notifyItemInserted(imageList.size)
     }
 
+    //RV setup
     private fun initRv() {
         adatper = ImageRvAdapter()
         binding.rvImages.layoutManager = GridLayoutManager(
             this,
-            10,
+            ROWS_COUNT,
             GridLayoutManager.HORIZONTAL,
             false
         )
