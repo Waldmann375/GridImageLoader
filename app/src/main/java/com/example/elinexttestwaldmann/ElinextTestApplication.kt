@@ -24,7 +24,8 @@ class ElinextTestApplication: Application() {
                 })
                     .build()
             }
-            //.memoryCachePolicy(CachePolicy.ENABLED)
+            .allowHardware(false)
+            .memoryCachePolicy(CachePolicy.ENABLED)
             //.availableMemoryPercentage(1.0)
             .build()
         Coil.setImageLoader(imageLoader)

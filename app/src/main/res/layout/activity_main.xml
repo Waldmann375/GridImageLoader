@@ -8,18 +8,24 @@
     tools:context=".home.MainActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         style="@style/ToolbarTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="@string/title"
         />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_images"
-        android:padding="1dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/item_image"
-        />
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_images"
+            android:padding="1dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            tools:listitem="@layout/item_image"
+            />
+    </ScrollView>
+
 </LinearLayout>
