@@ -22,7 +22,6 @@ class ImageViewHolder(val binding: ItemImageSimpleBinding) : RecyclerView.ViewHo
     val context = binding.root.context
 
     fun bind(list: MutableList<ImageModel>, position: Int, item: ImageModel.Image) {
-        //val currentItem: ImageModel.Image = list[position] as ImageModel.Image
 
         if (true) {
             binding.ivImageSimple.load(URL){
