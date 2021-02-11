@@ -3,26 +3,47 @@ package com.example.elinexttestwaldmann.home
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.elinexttestwaldmann.Constants.Companion.ROWS_COUNT
 import com.example.elinexttestwaldmann.R
 import com.example.elinexttestwaldmann.databinding.ActivityMainBinding
 import com.example.elinexttestwaldmann.home.recycler.ImageRvAdapter
-import com.example.elinexttestwaldmann.model.ImageModel
+import com.example.elinexttestwaldmann.home.recycler.ItemSpacingDecorator
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
+    private val viewModel: ImagesViewModel by viewModels()
     lateinit var binding: ActivityMainBinding
-    lateinit var adatper: ImageRvAdapter
-    var imageList: MutableList<ImageModel> = mutableListOf()
+    @Inject
+    lateinit var adapter: ImageRvAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setSupportActionBar(binding.toolbar)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         initRv()
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.imageFlow.collect {
+                when (it) {
+                    is ImageState.ImageList.IncreasedImageList -> {
+                        adapter.submitList(it.list)
+                        adapter.notifyItemInserted(it.list.size)
+                        binding.rvImages.scrollToPosition(adapter.itemCount - 1)
+                    }
+                    is ImageState.ImageList.NewImageList -> {
+                        adapter.submitList(it.list)
+                    }
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -43,41 +64,27 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    //creating new list
-    private fun getNewList(): MutableList<ImageModel> {
-        val list = mutableListOf<ImageModel>()
-        for (i in 0..139) {
-            list.add(ImageModel.Image(i))
-        }
-        imageList = list
-        return list
-    }
-
     private fun reloadList() {
-        binding.rvImages.adapter = null
-        adatper = ImageRvAdapter()
-        binding.rvImages.adapter = adatper
-        adatper.submitList(getNewList())
+        viewModel.reloadImages()
     }
 
     private fun addImage() {
-        imageList.add(ImageModel.Image(imageList.size))
-        adatper.submitList(imageList)
-        adatper.notifyItemInserted(imageList.size)
+        viewModel.addImage()
     }
 
     //RV setup
     private fun initRv() {
-        adatper = ImageRvAdapter()
         binding.rvImages.layoutManager = GridLayoutManager(
             this,
             ROWS_COUNT,
             GridLayoutManager.HORIZONTAL,
             false
         )
-        binding.rvImages.adapter = adatper
-        adatper.submitList(
-            getNewList()
+        binding.rvImages.addItemDecoration(
+            ItemSpacingDecorator(
+                resources.getDimensionPixelSize(R.dimen.cell_spacing)
+            )
         )
+        binding.rvImages.adapter = adapter
     }
 }

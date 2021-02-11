@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="cell_dimension">58dp</dimen>
-    <dimen name="cell_padding">1dp</dimen>
+    <dimen name="cell_spacing">1pt</dimen>
     <dimen name="cell_corner_radius">7dp</dimen>
 </resources>

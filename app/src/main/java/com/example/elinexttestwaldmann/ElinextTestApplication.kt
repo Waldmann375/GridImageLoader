@@ -6,9 +6,11 @@ import coil.Coil
 import coil.ImageLoader
 import coil.request.CachePolicy
 import coil.util.CoilUtils
+import dagger.hilt.android.HiltAndroidApp
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
+@HiltAndroidApp
 class ElinextTestApplication : Application() {
     override fun onCreate() {
         super.onCreate()

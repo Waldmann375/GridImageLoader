@@ -15,17 +15,13 @@
         app:title="@string/title"
         />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_images"
-            android:padding="1dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:padding="@dimen/cell_spacing"
+            android:layout_height="match_parent"
             tools:listitem="@layout/item_image"
             />
-    </ScrollView>
-
 </LinearLayout>
