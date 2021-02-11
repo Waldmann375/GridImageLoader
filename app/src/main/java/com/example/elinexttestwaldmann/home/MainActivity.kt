@@ -13,6 +13,7 @@ import com.example.elinexttestwaldmann.databinding.ActivityMainBinding
 import com.example.elinexttestwaldmann.home.recycler.ImageRvAdapter
 import com.example.elinexttestwaldmann.home.recycler.ItemSpacingDecorator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     @Inject
     lateinit var adapter: ImageRvAdapter
+    lateinit var job:Job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         initRv()
 
-        lifecycleScope.launchWhenStarted {
+        job = lifecycleScope.launchWhenStarted {
             viewModel.imageFlow.collect {
                 when (it) {
                     is ImageState.ImageList.IncreasedImageList -> {
@@ -86,5 +88,10 @@ class MainActivity : AppCompatActivity() {
             )
         )
         binding.rvImages.adapter = adapter
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 }
