@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     @Inject
     lateinit var adapter: ImageRvAdapter
-    lateinit var imageFlowObserverJob:Job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         initRv()
 
-        imageFlowObserverJob = lifecycleScope.launchWhenStarted {
+       lifecycleScope.launchWhenStarted {
             viewModel.imageFlow.collect {
                 when (it) {
                     is ImageState.ImageList.IncreasedImageList -> {
@@ -88,10 +87,5 @@ class MainActivity : AppCompatActivity() {
             )
         )
         binding.rvImages.adapter = adapter
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        imageFlowObserverJob.cancel()
     }
 }
