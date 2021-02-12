@@ -59,10 +59,20 @@ class ImageViewHolder(val binding: ItemImageBinding) : RecyclerView.ViewHolder(b
             return ImageViewHolder(binding)
         }
 
+        //Получаем ширину одной ячеки. Работает для любых экранов.
         private fun getCellWidth():Int {
+            //Получаем ширину экрана
             val width: Int = Resources.getSystem().displayMetrics.widthPixels
-            val spaces: Int = ElinextTestApplication.applicationContext.resources.getDimensionPixelSize(R.dimen.cell_spacing)*15
-            return (width-spaces)/COLUMNS_COUNT
+            //кол-во отступов между клетками и по краям
+            val spacingCount = (COLUMNS_COUNT+1)*2 - 1 //если -1 не отнять то виден край 8го ряда картинок, не знаю почему так.
+            //ширина одного отступа
+            val spacingWidth = ElinextTestApplication.applicationContext.resources.getDimensionPixelSize(R.dimen.cell_spacing)
+            //суммарная ширина всех отступов
+            val spacesSummaryWidth: Int = spacingWidth * spacingCount
+            //суммарная ширина всех ячеек с картинками
+            val picturesSummaryWidth: Int = width-spacesSummaryWidth
+            //делим её на кол-во ячеек - получаем ширину одной ячейки
+            return picturesSummaryWidth/COLUMNS_COUNT
         }
     }
 }
